@@ -1,11 +1,11 @@
 import java.util.*;
 
 public class _02_EvenFibonacci{
-    public static void main(String[] args){
+    public static int evenFibSumUnder(int n){
         int sum = 0;
         int prevFib = 1;
         int currFib = 1;
-        while (currFib < 4000000){
+        while (currFib < n){
             if (currFib % 2 == 0){
                 sum += currFib;
                 
@@ -14,8 +14,12 @@ public class _02_EvenFibonacci{
             currFib += prevFib;
             prevFib = temp;
           
-        System.out.println(prevFib + " " + currFib);
+        // System.out.println(prevFib + " " + currFib);
         }
-        System.out.println(sum);
+        return sum;
+    }
+    
+    public static void main(String[] args){
+        System.out.println("The sum of all even Fibonacci numbers under 4,000,000 is " + evenFibSumUnder(4000000));
     }
 }

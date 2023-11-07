@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class _05_SmallestMultiple{
+public class _06_SumSquareDifference{
     
     public static void main(String[] args){
         int sum = 0;
