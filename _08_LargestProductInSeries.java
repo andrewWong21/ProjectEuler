@@ -4,10 +4,10 @@ public class _08_LargestProductInSeries{
     
     public static StringBuilder sb = new StringBuilder();
     
-    public static int getLargestProduct(int len, String str){
-        int product = 0;
+    public static long getLargestProduct(int len, String str){
+        long product = 0;
         for (int i = 0; i + len <= str.length(); i++){
-            int currProduct = 1;
+            long currProduct = 1;
             for (int j = i; j < i + len; j++){
                 currProduct *= Character.getNumericValue(str.charAt(j));
             }
@@ -46,12 +46,12 @@ public class _08_LargestProductInSeries{
         // presence of zeroes means that many computations are wasted
         // due to zero products.
         
-        int maxProduct = 0;
+        long maxProduct = 0;
         
         // splitting the string into smaller strings that do not contain 0
         for (String substring : sb.toString().split("0")){
             if (substring.length() >= 13){
-                int maxSubProduct = getLargestProduct(13, substring);
+                long maxSubProduct = getLargestProduct(13, substring);
                 
                 // keep track of the largest product discovered so far
                 if (maxSubProduct > maxProduct){
@@ -62,7 +62,7 @@ public class _08_LargestProductInSeries{
         }
         
         System.out.println("The largest product of 13 adjacent digits in the string is " + maxProduct);
-        // System.out.println(9 * 7 * 8 * 1 * 7 * 9 * 7 * 7 * 8 * 4 * 6 * 1 * 7);
-        // The largest product, 2091059712, is obtained from the digits in the substring "9781797784617".
+        // System.out.println(5 * 5 * 7 * 6 * 6 * 8 * 9 * 6 * 6 * 4 * 8 * 9 * 5);
+        // The largest product, 23514624000, is obtained from the digits in the substring "5576689664895".
     }
 }
