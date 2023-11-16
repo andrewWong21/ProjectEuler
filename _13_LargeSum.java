@@ -1,7 +1,7 @@
 import java.util.*;
 import java.math.BigInteger;
 
-public class _12_HighlyDivisibleTriangularNumber{
+public class _13_LargeSum{
     
     public static void main(String[] args){
         BigInteger sum = BigInteger.ZERO;
