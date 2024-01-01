@@ -1,7 +1,14 @@
 import java.util.*;
 
 public class _61_CyclicalFigurateNumbers{
-    static ArrayList<HashSet<Integer>> polygons;
+    
+    static ArrayList<HashSet<Integer>> polygonSets = new ArrayList<HashSet<Integer>>();
+    static HashSet<Integer> triangles = new HashSet<Integer>(); // 96
+    static HashSet<Integer> squares   = new HashSet<Integer>(); // 68
+    static HashSet<Integer> pentagons = new HashSet<Integer>(); // 56
+    static HashSet<Integer> hexagons  = new HashSet<Integer>(); // 48
+    static HashSet<Integer> heptagons = new HashSet<Integer>(); // 43
+    static HashSet<Integer> octagons  = new HashSet<Integer>(); // 40
     
     public static boolean isTriangle(int p){
         // n(n+1)/2
@@ -39,26 +46,72 @@ public class _61_CyclicalFigurateNumbers{
         return n == (int) n;
     }
     
-    public static ArrayList<Integer> generateCycle(ArrayList<Integer> currCycle, boolean[] used){
-        if (currCycle.size() == 6) return currCycle;
-        for (int i = 0; i < polygons.size(); i++){
-            if (!used[i]){
-                // iterate through all unused polygon sets
-                // if (polygon / 100 == currCycle.get(currCycle.size() - 1)){
-                //   generateCycle()
-                //}
+    public static int[] generateCycle(int p1){
+        
+        for (int i = 0; i < polygonSets.size(); i++){
+            for (HashSet<Integer> pSet2 : polygonSets){
+                for (int p2 : pSet2){
+                    if (p2 == p1) continue;
+                    
+                    if ((p2 / 100) == (p1 % 100)){
+                        // System.out.println(String.format("%d %d", p1, p2));
+                        
+                        for (HashSet<Integer> pSet3 : polygonSets){
+                            if (pSet3 == pSet2) continue;
+                            
+                            for (int p3 : pSet3){
+                                if (p3 == p1 || p3 == p2) continue;
+                                
+                                if ((p3 / 100) == (p2 % 100)){
+                                    // System.out.println(String.format("%d %d %d", p1, p2, p3));
+                                    
+                                    for (HashSet<Integer> pSet4 : polygonSets){
+                                        if (pSet4 == pSet2 || pSet4 == pSet3) continue;
+                                        
+                                        for (int p4 : pSet4){
+                                            if (p4 == p1 || p4 == p2 || p4 == p3) continue;
+                                            
+                                            if ((p4 / 100) == (p3 % 100)){
+                                                // System.out.println(String.format("%d %d %d %d", p1, p2, p3, p4));
+                                                
+                                                for (HashSet<Integer> pSet5 : polygonSets){
+                                                    if (pSet5 == pSet2 || pSet5 == pSet3 || pSet5 == pSet4) continue;
+                                                    
+                                                    for (int p5 : pSet5){
+                                                        if (p5 == p1 || p5 == p2 || p5 == p3 || p5 == p4) continue;
+                                                        
+                                                        if ((p5 / 100) == (p4 % 100)){
+                                                            // System.out.println(String.format("%d %d %d %d %d", p1, p2, p3, p4, p5));
+                                                            
+                                                            for (HashSet<Integer> pSet6 : polygonSets){
+                                                                if (pSet6 == pSet2 || pSet6 == pSet3 || pSet6 == pSet4 || pSet6 == pSet5) continue;
+                                                                
+                                                                for (int p6 : pSet6){
+                                                                    if (p6 == p1 || p6 == p2 || p6 == p3 || p6 == p4 || p6 == p5) continue;
+                                                                    
+                                                                    if (((p6 / 100) == (p5 % 100)) && ((p6 % 100) == (p1 / 100))){
+                                                                        System.out.println(String.format("%d %d %d %d %d %d", p1, p2, p3, p4, p5, p6));
+                                                                        return new int[]{p1, p2, p3, p4, p5, p6};
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
-        return new ArrayList<Integer>();
+        return new int[0];
     }
     
     public static void main(String[] args){
-        HashSet<Integer> triangles = new HashSet<Integer>(); // 96
-        HashSet<Integer> squares   = new HashSet<Integer>(); // 68
-        HashSet<Integer> pentagons = new HashSet<Integer>(); // 56
-        HashSet<Integer> hexagons  = new HashSet<Integer>(); // 48
-        HashSet<Integer> heptagons = new HashSet<Integer>(); // 43
-        HashSet<Integer> octagons  = new HashSet<Integer>(); // 40
         
         for (int n = 1000; n <= 9999; n++){
             if (isTriangle(n))  triangles.add(n);
@@ -69,55 +122,40 @@ public class _61_CyclicalFigurateNumbers{
             if (isOctagon(n))   octagons.add(n);
         }
         
-        polygons = new ArrayList<HashSet<Integer>>();
-        polygons.add(triangles);
-        polygons.add(squares);
-        polygons.add(pentagons);
-        polygons.add(hexagons);
-        polygons.add(heptagons);
+        polygonSets.add(triangles);
+        polygonSets.add(squares);
+        polygonSets.add(pentagons);
+        polygonSets.add(hexagons);
+        polygonSets.add(heptagons);
         
         // The cyclic set of six integers will not necessarily follow the order of
         // triangle > square > pentagon > hexagon > heptagon > octagon > triangle.
+        // The set being cyclic allows starting from any set to find a solution.
         // The set of octagonal numbers is a good starting point for
         // creating the cycle because it has the fewest numbers.
         
-        HashMap<Integer, ArrayList<Integer>> map = new HashMap<>();
-        for (int octagon : octagons){
-            map.put(octagon, new ArrayList<Integer>());
-            for (int triangle : triangles){
-                if (triangle / 100 == octagon % 100){
-                    // System.out.println(octagon + " " + triangle);
-                }
-            }
-            for (int square : squares){
-                if (square / 100 == octagon % 100){
-                    // System.out.println(octagon + " " + square);
-                }
-            }
-            for (int pentagon : pentagons){
-                if (pentagon / 100 == octagon % 100){
-                    // System.out.println(octagon + " " + pentagon);
-                }
-            }
-            for (int hexagon : hexagons){
-                if (hexagon / 100 == octagon % 100){
-                    // System.out.println(octagon + " " + hexagon);
-                }
-            }
-            for (int heptagon : heptagons){
-                if (heptagon / 100 == octagon % 100){
-                    // System.out.println(octagon + " " + heptagon);
-                }
-            }
-        }
         // Approach: Build a cycle from a starting octagonal number,
-        // find other polygonal numbers that start with last 2 digits,
-        // keep track of built cycle in array until either 6 numbers are found
-        // or all possible numbers in polygonal sets are exhausted (cycle not completed)
-        
-        // generateCycle
+        // find other polygonal numbers in unused sets that start with last 2 digits of previous number,
+        // keep track of numbers in cycle and used polygon sets and repeat until a cycle of 6 numbers is found
         
         int sum = 0;
-        System.out.println("Sum of six cyclic integers that correspond to an s-gonal number, s = [2, 8]: " + sum); 
+        int[] cycle = new int[0];
+        
+        for (int octagon : octagons){
+            cycle = generateCycle(octagon);
+            
+            if (cycle.length == 6){
+                // System.out.println(Arrays.toString(cycle));
+                for (int num : cycle){
+                    sum += num;
+                }
+                break;
+            } 
+        }
+        
+        System.out.println("Sum of six cyclic integers that correspond to an s-gonal number, s = [3, 8]: " + sum); // 28684
+        // 1281, 8128, 2882, 8256, 5625, 2512
+        // 8-gon 6-gon 5-gon 3-gon 4-gon 7-gon
+        // octagon, hexagon, pentagon, triangle, square, heptagon
     }
 }
