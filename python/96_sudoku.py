@@ -1,42 +1,53 @@
-def sudoku(grids: list) -> int:
-
+def sudoku(boards: list) -> int:
     total: int = 0
-    for grid in grids:
-        total += corner_sum(solve(grid))
-    
+    for board in boards:
+        solve(board)
+        # add 3-digit number at top left corner of solved board to total
+        total += board[0][0] * 100 + board[0][1] * 10 + board[0][2]
     return total
 
-def solve(grid_str: str) -> str:
-
-    # approach: iterate through each empty cell in grid, marked by a 0
-    # test valid candidates and continue until grid becomes impossible (empty set for cell's corresponding row, column, and box)
-    # or end of grid is reached with filled-in grid marked as valid under sudoku rules
+def solve(board) -> bool:
+    for r in range(9):
+        for c in range(9):
+            if board[r][c] == 0: # empty cell
+                for d in range(1, 10):
+                    # check if digit d can be placed at board[r][c]
+                    if check(board, r, c, d):
+                        board[r][c] = d
+                        if solve(board):
+                            return True
+                        else:
+                            board[r][c] = 0
+                # current board state is not solvable
+                # backtrack to earlier filled position
+                return False
+    return True
     
-    # potential issues: recursion limit, implementing backtracking after tested value for cell results in invalid grid
-
-    # unpack string into 2D array
-    grid = []
+def check(board, r, c, d) -> bool:
+    # digit d cannot be placed at board[r][c] 
+    # if it already exists in the same row or column
+    if any([board[i][c] == d for i in range(9)]) or any([board[r][j] == d for j in range(9)]):
+        return False
+    # check if other cells in same box as board[r][c] already contain digit d
+    top, left = 3 * (r // 3), 3 * (c // 3)
+    if any(board[row][col] == d for row in range(top, top + 3) for col in range(left, left + 3)):
+        return False
+    # digit d can be placed at board[r][c] without conflicts
+    return True
     
-    # keep track of used numbers in given row, column, and box
-    rows  = [set() for _ in range(9)]
-    boxes = [set() for _ in range(9)]
-    cols  = [set() for _ in range(9)]
-    
-    return grid_str
-    
-def corner_sum(grid_str: str) -> int:
-    return int(grid_str[0:3]) + int(grid_str[27:30]) + int(grid_str[54:57])
-
 if __name__ == "__main__":
-    grids = []
+    boards = []
     
-    # f = open("96_sudoku.txt", 'r')
-    # lines = f.readlines()
-    # for i in range(0, len(lines), 10):
-        # grids.append("".join([row.strip() for row in lines[i+1:i+10]]))
-    # f.close()
-    # grids = grids[:1]
-    
-    grids.append("003020600900305001001806400008102900700000008006708200002609500800203009005010300")
-    
-    print(sudoku(grids))
+    f = open("96_sudoku.txt", 'r')
+    lines = f.readlines()
+    board = []
+    for line in lines:
+        # skip lines with "Grid"
+        if "Grid" not in line:
+            # convert string into list of ints
+            board.append([ord(c) - ord('0') for c in line.strip()])
+            if len(board) == 9: # one sudoku grid formatted
+                boards.append(board)
+                board = []
+    f.close()
+    print(sudoku(boards))
