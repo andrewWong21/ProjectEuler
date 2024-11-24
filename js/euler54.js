@@ -26,17 +26,21 @@ function evaluate(hand){
     
     if (isFlush && isStraight){
         // royal flush
-        if (cards[4].rank == 'A') return {handRank : 10, highCard : cards[4].rank};
+        if (cards[0].rank == 'T' && cards[4].rank == 'A'){
+            return {handRank : 10, highCard : cards[4].rank};
+        }
         // straight flush
         else return {handRank : 9, highCard : cards[4].rank};
     }
     // four of a kind
     if (Object.values(counts).includes(4)){
-        return {handRank : 8, highCard : Object.values(counts).find(rank => counts[rank] == 4)};
+        const quadRank = Object.values(counts).find(rank => counts[rank] == 4);
+        return {handRank : 8, highCard : quadRank};
     }
     // full house
     if (Object.values(counts).includes(3) && Object.values(counts).includes(2)){
-        return {handRank : 7, highCard : Object.values(counts).find(rank => counts[rank] == 3)};
+        const tripleRank = Object.keys(counts).find(rank => counts[rank] == 3);
+        return {handRank : 7, highCard : tripleRank};
     }
     // flush
     if (isFlush) return {handRank : 6, highCard : cards[4].rank};
@@ -44,15 +48,20 @@ function evaluate(hand){
     if (isStraight) return {handRank : 5, highCard : cards[4].rank};
     // three of a kind
     if (Object.values(counts).includes(3)){
-        return {handRank : 4, highCard : Object.values(counts).find(rank => counts[rank] == 3)};
+        const tripleRank = Object.keys(counts).find(rank => counts[rank] == 3);
+        return {handRank : 4, highCard : tripleRank};
     }
     // two pair
     if (Object.values(counts).filter(count => count == 2).length == 2){
-        return {handRank : 3, highCard : Object.values(counts).find(rank => counts[rank] == 2)}; 
+        const pairRanks = Object.keys(counts).filter(rank => counts[rank] == 2);
+        const values = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
+        pairRanks.sort((a, b) => values.indexOf(a) - values.indexOf(b));
+        return {handRank : 3, highCard : pairRanks[1]};
     }
     // pair
     if (Object.values(counts).includes(2)){
-        return {handRank : 2, highCard : Object.values(counts).find(rank => counts[rank] == 2)};
+        const pairRank = Object.keys(counts).find(rank => counts[rank] == 2);
+        return {handRank : 2, highCard : pairRank};
     }
     // high card
     return {handRank : 1, highCard : cards[4].rank};
