@@ -16,9 +16,8 @@ public class _84_MonopolyOdds{
 	static Random random = new Random();
 	
 	public static string Euler84(){
-	    // TODO: figure out why modal strings are not being generated with expected probabilities
 		Dictionary<string, int> modalTests = new Dictionary<string, int>();
-		int trials = 100, games = 200, turns = 5000, sides = 4;
+		int trials = 100, games = 100, turns = 1000, sides = 4;
 		for (int i = 0; i < trials; i++){
 			Dictionary<string, int> modalStrings = new Dictionary<string, int>();
 			
@@ -28,9 +27,6 @@ public class _84_MonopolyOdds{
 			}
 			string mostFrequentModal = modalStrings.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
 			modalTests[mostFrequentModal] = modalTests.GetValueOrDefault(mostFrequentModal, 0) + 1;
-		}
-		foreach (var kv in modalTests.OrderByDescending(kv => kv.Value)){
-			Console.WriteLine(kv.Key + " " + kv.Value);
 		}
 		return modalTests.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
 	}
@@ -47,13 +43,12 @@ public class _84_MonopolyOdds{
 		return res;
 	}
 	
-	public static string Simulate(int sides, int turns){
+	public static string Simulate(int turns, int sides){
 		List<int> communityChestCards = new List<int>{0, 10, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
         List<int> chanceCards = new List<int>{0, 10, 11, 24, 39, 5, -5, -5, -12, -3, -1, -1, -1, -1, -1, -1};
 		Shuffle(communityChestCards);
 		Shuffle(chanceCards);
-		
-		Queue<int> ccq = new Queue<int>(communityChestCards);		
+		Queue<int> ccq = new Queue<int>(communityChestCards);
 		Queue<int> chq = new Queue<int>(chanceCards);
 		
 		int curr = 0, doubles = 0;
@@ -67,6 +62,7 @@ public class _84_MonopolyOdds{
 					doubles = 0;
 					curr = 10;
 					visited[curr] = visited.GetValueOrDefault(curr, 0) + 1;
+					continue;
 				}
 			}
 			else doubles = 0;
