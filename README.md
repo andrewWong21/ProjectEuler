@@ -9,7 +9,7 @@ These different implementations showcase certain quirks of these languages, such
 ---
 | Language   | # Complete |  
 | :--------: | :-: |
-| Java       |  93 |
+| Java       |  94 |
 | Python     | 100 | 
 | C++        | 100 | 
 | C#         | 100 | 
