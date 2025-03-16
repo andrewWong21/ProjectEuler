@@ -6,17 +6,17 @@ Since November 1, 2023, I've made a habit of writing one solution in a certain l
 These different implementations showcase certain quirks of these languages, such as support for large number representations and file-reading capabilities.
 
 # Status
----
+
 | Language   | # Complete |  
 | :--------: | :-: |
-| Java       |  99 |
+| Java       | 100 |
 | Python     | 100 | 
 | C++        | 100 | 
 | C#         | 100 | 
 | JavaScript | 100 |
 
 ## Mathematics principles involved
----
+
 - [Fibonacci numbers](https://en.wikipedia.org/wiki/Fibonacci_sequence)
 - [Prime numbers](https://en.wikipedia.org/wiki/Prime_number)
 - [Palindromic numbers](https://en.wikipedia.org/wiki/Palindromic_number)
