@@ -10,10 +10,11 @@ These different implementations showcase certain quirks of these languages, such
 | Language   | # Complete |  
 | :--------: | :-: |
 | Java       | 100 |
-| Python     | 100 | 
-| C++        | 100 | 
-| C#         | 100 | 
+| Python     | 100 |
+| C++        | 100 |
+| C#         | 100 |
 | JavaScript | 100 |
+| Go         |   2 |
 
 ## Mathematics principles involved
 
