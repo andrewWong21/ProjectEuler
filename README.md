@@ -14,7 +14,7 @@ These different implementations showcase certain quirks of these languages, such
 | C++        | 100 |
 | C#         | 100 |
 | JavaScript | 100 |
-| Go         |  23 |
+| Go         |  24 |
 
 ## Mathematics principles involved
 
