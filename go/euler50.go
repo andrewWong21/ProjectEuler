@@ -3,12 +3,10 @@ import "fmt"
 
 func sieve(n int) []int {
     primes := []int{}
-    primeSum := 0
     sieved := make([]bool, n)
     for i := 2; i < n; i++ {
         if !sieved[i] {
             primes = append(primes, i)
-            primeSum += i
             for j := 2 * i; j < n; j += i {
                 sieved[j] = true
             }
@@ -21,21 +19,27 @@ func main() {
     res := 0
     primes := sieve(1000000)
     primesSet := make(map[int]bool)
+    sums := []int{0}
+    maxSum := 0
     for _, p := range primes {
+        if maxSum + p < 1000000 {
+            maxSum += p
+            sums = append(sums, maxSum)
+        }
         primesSet[p] = true
     }
-    sums := make([]int, len(primes) + 1)
-    for i := 1; i <= len(primes); i++ {
-        sums[i] = sums[i - 1] + primes[i - 1]
-    }
     
+    // use maximum window size, shrink until prime is found with current window size
     for length := len(sums); res == 0 && length > 0; length-- {
-        for start := len(sums) - length - 1; res == 0 && start >= 0; start-- {
+        // use latest start index to guarantee first prime sum found is largest
+        // start + length < len(sums)
+        // start + length <= len(sums) - 1
+        // 0 <= start <= len(sums) - 1 - length
+        for start := len(sums) - 1 - length; res == 0 && start >= 0; start-- {
             sumA := sums[start]
             sumB := sums[start + length]
             total := sumB - sumA
-            _, found := primesSet[total]
-            if found {
+            if primesSet[total] {
                 res = total
             }
         }
