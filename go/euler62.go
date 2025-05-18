@@ -15,21 +15,24 @@ func sortDigits(n int) string {
 }
 
 func main() {
-    res := math.MaxInt32
+    res := math.MaxInt64
     // a number has at least 5 permutations if it has at least 3 digits
     maxLen := 3
-    for res == math.MaxInt32 {
+    for res == math.MaxInt64 {
         cubeDigits := make(map[string][]int)
-        start := math.Ceil(math.Pow(math.Pow(10, maxLen - 1), 1.0/3.0))
-        for len(string(math.Pow(start, 3)) < maxLen {
-            cube = start * start * start
-            digits = sortDigits()
-            _, found := cubeDigits[digits]
-            if found {
-                cubeDigits[digits] = append(cubeDigits[digits], cube)
-            }
-            // TODO: check if digit family has exactly 3 permutations and identify smallest cube
+        start := math.Ceil(math.Cbrt(math.Pow(10, float64(maxLen - 1))))
+        end := math.Floor(math.Cbrt(math.Pow(10, float64(maxLen))))
+        for n := int(start); n <= int(end); n++ {
+            cube := n * n * n
+            digits := sortDigits(cube)
+            cubeDigits[digits] = append(cubeDigits[digits], cube)
         }
+        for _, group := range cubeDigits {
+            if len(group) == 5 && group[0] < res {
+                res = group[0]
+            }
+        }
+        maxLen++
     }
     fmt.Println(res)
 }

@@ -7,44 +7,47 @@ import (
 func isTriangle(n int) bool {
     // p = n * (n + 1) / 2
     // 0 = n^2 + n - 2p
-    // n = () / 2
-    x := 
+    // n = (-1 + sqrt(1 + 8p)) / 2
+    x := (math.Sqrt(8 * float64(n) + 1) - 1) / 2
     return x == math.Floor(x)
 }
 
 func isSquare(n int) bool {
-    x := math.Sqrt(n)
+    x := math.Sqrt(float64(n))
     return x == math.Floor(x)
 }
 
 func isPentagon(n int) bool {
     // p = n * (3n - 1) / 2
-    
-    x :=
+    // 0 = 3n^2 - n - 2p
+    // n = (1 + sqrt(1 + 24p)) / 6
+    x := (math.Sqrt(24 * float64(n) + 1) + 1) / 6
     return x == math.Floor(x)
 }
 
 func isHexagon(n int) bool {
     // p = n * (2n - 1)
-    
-    x :=
+    // 0 = 2n^2 - n - p
+    // n = (1 + sqrt(1 + 8p)) / 4
+    x := (math.Sqrt(8 * float64(n) + 1) + 1) / 4
     return x == math.Floor(x)
 }
 
 
 func isHeptagon(n int) bool {
     // p = n * (5n - 3) / 2
-    
-    x :=
+    // 0 = 5n^2 - 3n - 2p
+    // n = (3 + sqrt(9 + 40p)) / 10
+    x := (math.Sqrt(40 * float64(n) + 9) + 3) / 10
     return x == math.Floor(x)
 }
 
 func isOctagon(n int) bool {
     // p = n * (3n - 2)
     // 0 = 3n^2 - 2n - p
-    // n = () / 6
-    // n = () / 6
-    x :=
+    // n = (2 + sqrt(4 + 12p)) / 6
+    // n = (1 + sqrt(1 + 3p)) / 3
+    x :=(math.Sqrt(3 * float64(n) + 1) + 1) / 3
     return x == math.Floor(x)
 }
 
@@ -52,39 +55,30 @@ func canContinue(a int, b int) bool {
     return a % 100 == b / 100
 }
 
-func generateCycle(cycle []int, used map[[]int]bool, polygonSets [][]int) []int {
+func generateCycle(cycle []int, used map[int]bool, polygonSets [][]int) []int {
     if len(cycle) == 6 {
         if canContinue(cycle[5], cycle[0]) {
             return cycle
         }
-        return [0]int{}
+        return []int{}
     }
-    // TODO: refactor nested loop for better readability
-    /*
-    for _, s2 := range polygonSets {
-        for _, p2 := range s2 {
-            if p2 == p1 {
-                continue
-            }
-            if p1 % 100 == p2 / 100 {
-                for _, s3 := range polygonSets {
-                    if s3 == s2 {
-                        continue
-                    }
-                    for _, p3 := range s3 {
-                        if p3 == p1 || p3 == p2 {
-                            continue
-                        }
-                        if p2 % 100 == p3 / 100 {
-                            // repeat for following 4 sets
-                        }
-                    }
+    last := cycle[len(cycle) - 1]
+    for i, pSet := range polygonSets {
+        if used[i] {
+            continue
+        }
+        for _, p := range pSet {
+            if canContinue(last, p) {
+                used[i] = true
+                newCycle := generateCycle(append(cycle, p), used, polygonSets)
+                if len(newCycle) != 0 {
+                    return newCycle
                 }
+                used[i] = false
             }
         }
     }
-    return [0]int{}
-    */
+    return []int{}
 }
 
 func main() {
@@ -116,17 +110,17 @@ func main() {
         }
     }
     polygons := [][]int{
-        triangles, squares, pentagons, hexagons, heptagons
+        triangles, squares, pentagons, hexagons, heptagons,
     }
     res := 0
     
     // start with smallest set
     for _, oct := range octagons {
-        orderedSet := generateCycles(oct, polygons)
+        cycle := generateCycle([]int{oct}, make(map[int]bool), polygons)
         
-        if len(orderedSet) == 6 {
+        if len(cycle) == 6 {
             sum := 0
-            for _, p := range orderedSet {
+            for _, p := range cycle {
                 sum += p
             }
             res = sum
