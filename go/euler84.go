@@ -3,6 +3,7 @@ import (
     "fmt"
     "time"
     "math/rand"
+    "slices"
 )
 
 
@@ -66,6 +67,11 @@ func simulate(sides int, turns int) string {
         }
         
         // apply square side-effects if applicable
+        if slices.Contains(ccs, curr) {
+            
+        } else if slices.Contains(chs, curr) {
+            
+        }
         
         // handle community chest and chance card draws
         // draw card, apply effect and insert at end of queue
@@ -75,9 +81,22 @@ func simulate(sides int, turns int) string {
 }
 
 func getModalStr(squares []int) string {
-    // TODO: generate length-6 modal string
+    // generate length-6 modal string
     // from indices of top 3 most visited squares
-    return ""
+    first, second, third := 0, 0, 0
+    for i := 0; i < len(squares); i++ {
+        if squares[i] > squares[first] {
+            third = second
+            second = first
+            first = i
+        } else if squares[i] > squares[second] {
+            third = second
+            second = i
+        } else if squares[i] > squares[third] {
+            third = i
+        }
+    }
+    return fmt.Sprintf("%02d", first) + fmt.Sprintf("%02d", second) + fmt.Sprintf("%02d", third)
 }
 
 func main() {
