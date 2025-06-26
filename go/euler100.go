@@ -27,14 +27,14 @@ func main() {
     for res == 0 {
         // recurrence relation
         if x % 2 == 1 {
-            b := 1 + ((1 + x) / 2)
+            b := r + ((1 + x) / 2)
             if b + r > minDiscs {
-                fmt.Println("res", b)
+                fmt.Println(b)
                 break
             }
         }
         xNext := x_f * x + 8 * r_f * r
-        rNext := x_f * r + r_f * x
+        rNext := r_f * x + x_f * r
         x, r = xNext, rNext
     }
 }
