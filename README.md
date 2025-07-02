@@ -15,7 +15,7 @@ These different implementations showcase certain quirks of these languages, such
 | C#         | 100 |
 | JavaScript | 100 |
 | Go         |  96 |
-| TypeScript |   5 |
+| TypeScript |   6 |
 
 ## Mathematics principles involved
 
